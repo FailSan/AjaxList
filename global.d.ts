@@ -1,0 +1,1 @@
+declare function __doPostBack(eventTarget: string, eventArguments: any);
