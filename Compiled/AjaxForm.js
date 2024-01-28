@@ -21,13 +21,13 @@ export class AjaxForm {
     }
     Initialize() {
         this._searchButton.addEventListener("click", (event) => {
-            this.Search(event);
+            this.Search(event, null);
         });
         this._resetButton.addEventListener("click", (event) => {
             this.Reset(event);
         });
         this._inputs.forEach(field => field.addEventListener("submit", (event) => {
-            this.Search(event);
+            this.Search(event, null);
         }));
     }
     Reset(event) {
@@ -37,13 +37,13 @@ export class AjaxForm {
             else if (x instanceof HTMLSelectElement)
                 x.value = "";
         });
-        this.Search(event);
+        this.Search(event, 0);
     }
-    async Search(event) {
+    async Search(event, pageIndex) {
         if (event != null)
             event.preventDefault();
-        var pageIndex = 0;
-        var pageSize = 5;
+        pageIndex = pageIndex ?? 0;
+        var pageSize = Number.parseInt(this.parentList.navigation.pageSize) ?? 5;
         var typedRequest;
         var paginatedRequest;
         if (this.parentList.entity == Entity.Announcement) {

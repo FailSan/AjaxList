@@ -51,7 +51,6 @@ export class AjaxModal {
             this.label.textContent = columnSetting.Method;
             this.buttons.forEach(x => {
                 let newButton = x.cloneNode(true);
-                newButton.textContent = announcement.Id;
                 newButton.addEventListener("click", () => {
                     __doPostBack(columnSetting.Method, announcement.Id);
                 });

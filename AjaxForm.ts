@@ -22,7 +22,6 @@ export class AjaxForm {
         this._apiUrl = this._searchButton.formAction;
 
         this.Initialize();
-        this.Reset(null);
     }
     
     private set inputs(fields: NodeListOf<HTMLElement>) {
@@ -31,7 +30,7 @@ export class AjaxForm {
 
     Initialize(): void {
         this._searchButton.addEventListener("click", (event) => {
-            this.Search(event);
+            this.Search(event, null);
         });
 
         this._resetButton.addEventListener("click", (event) => {
@@ -39,7 +38,7 @@ export class AjaxForm {
         });
 
         this._inputs.forEach(field => field.addEventListener("submit", (event) => {
-            this.Search(event);
+            this.Search(event, null);
         }))
     }
 
@@ -50,15 +49,15 @@ export class AjaxForm {
             else if (x instanceof HTMLSelectElement)
                 (<HTMLSelectElement>x).value = "";
         });
-        this.Search(event);
+        this.Search(event, 0);
     }
 
-    async Search(event: Event | null) : Promise<void> {
+    async Search(event: Event | null, pageIndex: number | null) : Promise<void> {
         if (event != null)
             event.preventDefault();
 
-        var pageIndex = 0;
-        var pageSize = 5;
+        pageIndex = pageIndex ?? 0;
+        var pageSize = Number.parseInt(this.parentList.navigation.pageSize) ?? 5;
 
         var typedRequest: RequestType;
         var paginatedRequest: PaginatedRequest<RequestType>;
