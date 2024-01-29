@@ -14,7 +14,6 @@ export class AjaxForm {
         this._resetButton = this.container.querySelector("[data-action='reset']");
         this._apiUrl = this._searchButton.formAction;
         this.Initialize();
-        this.Reset(null);
     }
     set inputs(fields) {
         fields.forEach(x => this._inputs.push(x));

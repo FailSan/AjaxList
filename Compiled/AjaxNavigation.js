@@ -69,7 +69,20 @@ export class AjaxNavigation {
             this.parentList.form.Search(event, this.pageIndex);
         });
         this.indexSelector.appendChild(activeItem);
-        if (this.parentList.result?.TotalPages > this.pageIndex) {
+        if (this.parentList.result?.TotalPages > (this.pageIndex + 1)) {
+            //PageIndex - 1
+            let nextIndexItem = document.createElement("li");
+            nextIndexItem.classList.add("page-item");
+            let nextIndexLink = document.createElement("a");
+            nextIndexLink.classList.add("page-link");
+            nextIndexLink.href = "#";
+            nextIndexLink.textContent = (this.pageIndex + 2).toString();
+            nextIndexItem.appendChild(nextIndexLink);
+            nextIndexItem.addEventListener("click", (event) => {
+                event.preventDefault();
+                this.parentList.form.Search(event, (this.pageIndex + 1));
+            });
+            this.indexSelector.appendChild(nextIndexItem);
             //Next
             let nextItem = document.createElement("li");
             nextItem.classList.add("page-item");
@@ -83,19 +96,6 @@ export class AjaxNavigation {
                 this.parentList.form.Search(event, (this.pageIndex + 1));
             });
             this.indexSelector.appendChild(nextItem);
-            //PageIndex - 1
-            let nextIndexItem = document.createElement("li");
-            nextIndexItem.classList.add("page-item");
-            let nextIndexLink = document.createElement("a");
-            nextIndexLink.classList.add("page-link");
-            nextIndexLink.href = "#";
-            nextIndexLink.textContent = (this.pageIndex + 1).toString();
-            nextIndexItem.appendChild(nextIndexLink);
-            nextIndexItem.addEventListener("click", (event) => {
-                event.preventDefault();
-                this.parentList.form.Search(event, (this.pageIndex + 1));
-            });
-            this.indexSelector.appendChild(nextIndexItem);
         }
         this.sizeSelector.value = this.parentList.result?.PageSize.toString() ?? "5";
     }
