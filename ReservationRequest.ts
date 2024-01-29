@@ -1,9 +1,10 @@
 export interface ReservationRequest {
-    OfferId: number;
-    FirstName: string;
-    LastName: string;
-    Email: string;
+    OfferId: number | null;
+    ReservedByName: string;
+    ReservedBySurname: string;
+    ReservedByEmail: string;
+    Category: string;
     Typology: string;
-    Day: Date | null;
-    Hour: string;
+    ReservedDate: string | null;
+    ReservedStartingTime: string | null;
 }

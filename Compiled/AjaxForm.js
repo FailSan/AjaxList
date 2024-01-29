@@ -104,15 +104,40 @@ export class AjaxForm {
             Email: email,
             Typology: typology,
             Category: category,
-            BeginDate: beginDate == "" ? null : new Date(beginDate),
-            EndDate: endDate == "" ? null : new Date(endDate),
-            PublishedBeginDate: publishedBeginDate == "" ? null : new Date(publishedBeginDate),
-            PublishedEndDate: publishedEndDate == "" ? null : new Date(publishedEndDate)
+            BeginDate: beginDate == "" ? null : beginDate,
+            EndDate: endDate == "" ? null : endDate,
+            PublishedBeginDate: publishedBeginDate == "" ? null : publishedBeginDate,
+            PublishedEndDate: publishedEndDate == "" ? null : publishedEndDate
         };
         return announcementRequest;
     }
     BuildReservationRequest() {
-        var reservationRequest = {};
+        var offerIdField = this._inputs.find(x => x.dataset.property == "OfferId");
+        var reservedByNameField = this._inputs.find(x => x.dataset.property == "ReservedByName");
+        var reservedByLastNameField = this._inputs.find(x => x.dataset.property == "ReservedBySurname");
+        var reservedByEmailField = this._inputs.find(x => x.dataset.property == "ReservedByEmail");
+        var typologyField = this._inputs.find(x => x.dataset.property == "Typology");
+        var categoryField = this._inputs.find(x => x.dataset.property == "Category");
+        var reservedDateField = this._inputs.find(x => x.dataset.property == "ReservedDate");
+        var reservedStartingTimeField = this._inputs.find(x => x.dataset.property == "ReservedStartingTime");
+        var offerId = offerIdField ? offerIdField.value : "";
+        var reservedByName = reservedByNameField ? reservedByNameField.value : "";
+        var reservedByLastName = reservedByLastNameField ? reservedByLastNameField.value : "";
+        var reservedByEmail = reservedByEmailField ? reservedByEmailField.value : "";
+        var typology = typologyField ? typologyField.value : "";
+        var category = categoryField ? categoryField.value : "";
+        var reservedDate = reservedDateField ? reservedDateField.value : "";
+        var reservedStartingTime = reservedStartingTimeField ? reservedStartingTimeField.value : "";
+        var reservationRequest = {
+            OfferId: Number.parseInt(offerId) ?? null,
+            ReservedByName: reservedByName,
+            ReservedBySurname: reservedByLastName,
+            ReservedByEmail: reservedByEmail,
+            Typology: typology,
+            Category: category,
+            ReservedDate: reservedDate == "" ? null : reservedDate,
+            ReservedStartingTime: reservedStartingTime == "" ? null : reservedStartingTime,
+        };
         return reservationRequest;
     }
 }

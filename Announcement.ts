@@ -8,7 +8,7 @@ export interface Contact {
 export interface Location {
     Address: string;
     CivicNumber: string;
-    CAP: number;
+    Cap: number;
     Municipality: string;
     Province: string;
     CompleteAddress: string;
@@ -20,14 +20,19 @@ export interface Announcement {
     Description: string;
     Typology: string;
     Category: string;
-    BeginDate: Date;
-    EndDate: Date;
-    PublishDate: Date | null;
+    BeginDate: string;
+    EndDate: string;
+    PublishDate: string | null;
     Announcer: Contact;
     Location: Location;
 }
 
 export interface Offer extends Announcement {
+    Start: string;
+    End: string;
+    Capacity: number;
+    SaturdaysIncluded: boolean;
+    HolidaysIncluded: boolean;
     Slots: Array<Slot>;
 }
 
@@ -36,14 +41,22 @@ export interface Request extends Announcement {
 }
 
 export interface Slot {
+    OfferId: number;
     Id: number;
-    Day: Date;
-    StartTime: string;
-    EndTime: string;
-    ReservedBy: Contact | null;
+    Date: string;
+    Start: string;
+    End: string;
+    Typology: string;
+    Reservation: Reservation | null;
+}
+
+export interface Reservation {
+    Id: number;
+    ReservedBy: Contact;
 }
 
 export interface Response {
     Id: number;
-    RespondedBy: Contact | null;
+    RespondedBy: Contact;
+    RespondedAt: string;
 }

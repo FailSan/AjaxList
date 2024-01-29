@@ -5,8 +5,8 @@ export interface AnnouncementRequest {
     Email: string;
     Typology: string;
     Category: string;
-    BeginDate: Date | null;
-    EndDate: Date | null;
-    PublishedBeginDate: Date | null;
-    PublishedEndDate: Date | null;
+    BeginDate: string | null;
+    EndDate: string | null;
+    PublishedBeginDate: string | null;
+    PublishedEndDate: string | null;
 }
