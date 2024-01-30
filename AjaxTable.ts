@@ -254,6 +254,10 @@ export class AjaxTable {
                 textContent = announcement.PublishDate!;
                 break;
             
+            case "status":
+                textContent = announcement.Status;
+                break;
+            
             default:
                 textContent = "-";
         }

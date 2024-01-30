@@ -25,6 +25,7 @@ export interface Announcement {
     PublishDate: string | null;
     Announcer: Contact;
     Location: Location;
+    Status: string;
 }
 
 export interface Offer extends Announcement {
