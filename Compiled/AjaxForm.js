@@ -85,8 +85,8 @@ export class AjaxForm {
         var categoryField = this._inputs.find(x => x.dataset.property == "Category");
         var beginDateField = this._inputs.find(x => x.dataset.property == "BeginDate");
         var endDateField = this._inputs.find(x => x.dataset.property == "EndDate");
-        var publishedBeginDateField = this._inputs.find(x => x.dataset.property == "PublishedBeginDate");
-        var publishedEndDateField = this._inputs.find(x => x.dataset.property == "PublishedEndDate");
+        var publishedBeginDateField = this._inputs.find(x => x.dataset.property == "PublishBeginDate");
+        var publishedEndDateField = this._inputs.find(x => x.dataset.property == "PublishEndDate");
         var title = titleField ? titleField.value : "";
         var firstName = firstNameField ? firstNameField.value : "";
         var lastName = lastNameField ? lastNameField.value : "";
@@ -104,10 +104,10 @@ export class AjaxForm {
             Email: email,
             Typology: typology,
             Category: category,
-            BeginDate: beginDate == "" ? null : beginDate,
-            EndDate: endDate == "" ? null : endDate,
-            PublishedBeginDate: publishedBeginDate == "" ? null : publishedBeginDate,
-            PublishedEndDate: publishedEndDate == "" ? null : publishedEndDate
+            BeginDate: beginDate == "" ? null : (Date.parse(beginDate) ? new Date(beginDate) : null),
+            EndDate: endDate == "" ? null : (Date.parse(endDate) ? new Date(endDate) : null),
+            PublishBeginDate: publishedBeginDate == "" ? null : (Date.parse(publishedBeginDate) ? new Date(publishedBeginDate) : null),
+            PublishEndDate: publishedEndDate == "" ? null : (Date.parse(publishedEndDate) ? new Date(publishedEndDate) : null)
         };
         return announcementRequest;
     }

@@ -5,6 +5,6 @@ export interface ReservationRequest {
     ReservedByEmail: string;
     Category: string;
     Typology: string;
-    ReservedDate: string | null;
+    ReservedDate: Date | null;
     ReservedStartingTime: string | null;
 }
