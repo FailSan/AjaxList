@@ -119,39 +119,6 @@ export class AjaxTable {
         return row;
     }
 
-    BuildReservationPropertyCell(row: HTMLTableRowElement, column: PropertyColumnSettings, reservation: Slot) {
-        var newCell = document.createElement("td");
-        var textContent: string;
-
-        switch(column.Property.toLowerCase()) {
-            case "id":
-                newCell = document.createElement("th");
-                newCell.scope = "row";
-                textContent = reservation.Id.toString();
-                break;
-
-            case "typology":
-                textContent = reservation.Typology;
-                break;
-
-            case "reservation":
-                var firstName = reservation.Reservation?.ReservedBy.FirstName;
-                var lastName = reservation.Reservation?.ReservedBy.LastName;
-                var date = reservation.Date;
-                var hour = reservation.Start;
-                textContent = `${firstName} ${lastName} - ${date} - ${hour}`;
-                break;
-            
-            default:
-                textContent = "-";
-        }
-
-        newCell.textContent = textContent;
-        newCell.classList.add("align-middle");
-
-        row.appendChild(newCell);
-    }
-
     BuildActionCell(row: HTMLTableRowElement, column: ActionColumnSettings, response: ResponseType) {
         var newCell = document.createElement("td");
         
@@ -268,52 +235,34 @@ export class AjaxTable {
         row.appendChild(newCell);
     }
 
-    BuildAnnouncementActionCell(row: HTMLTableRowElement, column: ActionColumnSettings, announcement: Announcement) {
+    BuildReservationPropertyCell(row: HTMLTableRowElement, column: PropertyColumnSettings, reservation: Slot) {
         var newCell = document.createElement("td");
-        
-        var newButton;
-        switch(column.Action) {
-            case "modal":
-                newButton = document.createElement("button");
-                newButton.type = "button";
-                newButton.dataset.bsToggle = "modal";
-                newButton.dataset.bsTarget = column.ModalId;
-                newButton.addEventListener("click", () => {
-                    let targetModal = this.parentList.modals.find(x => x.id == column.ModalId)
-                    targetModal?.UpdateAnnouncement(column, announcement);
-                });
+        var textContent: string;
+
+        switch(column.Property.toLowerCase()) {
+            case "id":
+                newCell = document.createElement("th");
+                newCell.scope = "row";
+                textContent = reservation.Id.toString();
                 break;
 
-            case "link":
-                newButton = document.createElement("a");
-                newButton.href = column.ActionUrl + "?announcement=" + announcement.Id;
+            case "typology":
+                textContent = reservation.Typology;
                 break;
 
-            case "postback":
-                newButton = document.createElement("button");
-                newButton.type = "button";
-                newButton.addEventListener("click", (event) => {
-                    event.preventDefault();
-                    __doPostBack(column.Method, announcement.Id);
-                });
+            case "reservation":
+                var firstName = reservation.Reservation?.ReservedBy.FirstName;
+                var lastName = reservation.Reservation?.ReservedBy.LastName;
+                var date = reservation.Date;
+                var hour = reservation.Start;
+                textContent = `${firstName} ${lastName} - ${date} - ${hour}`;
                 break;
+            
+            default:
+                textContent = "-";
         }
-        
-        newButton.textContent = column.Label;
-        let cssClass = "btn-primary";
-        switch(column.Method) {
-            case "publish":
-                cssClass = "btn-success";
-                break;
-            case "refuse":
-                cssClass = "btn-danger";
-                break;
-            case "archive":
-                cssClass = "btn-warning";
-        }
-        newButton.classList.add('btn', cssClass);
-        
-        newCell.appendChild(newButton);
+
+        newCell.textContent = textContent;
         newCell.classList.add("align-middle");
 
         row.appendChild(newCell);

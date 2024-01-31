@@ -135,7 +135,7 @@ export class AjaxForm {
             ReservedByEmail: reservedByEmail,
             Typology: typology,
             Category: category,
-            ReservedDate: reservedDate == "" ? null : reservedDate,
+            ReservedDate: reservedDate == "" ? null : (Date.parse(reservedDate) ? new Date(reservedDate) : null),
             ReservedStartingTime: reservedStartingTime == "" ? null : reservedStartingTime,
         };
         return reservationRequest;

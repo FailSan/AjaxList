@@ -26,21 +26,17 @@ export class AjaxModal {
 
             this.PopulateAnnouncement(announcement);
             
-            if (announcement.Category == "Offro" || announcement.Category == "Offer") {
+            if ((announcement as Offer).Slots !== undefined) {
                 let offerResult: Offer;
                 let serverResponse = await fetch("/api/cerco-offro/offer/get/" + announcement.Id, {
                     method: "get",
                 });
 
-                if (!serverResponse.ok) {
-                    offerResult = {
+                if (!serverResponse.ok)
+                    offerResult = { } as Offer;
 
-                    } as Offer;
-                }
-
-                else {
+                else
                     offerResult = await serverResponse.json();
-                }
 
                 this.PopulateOffer(offerResult);
             }
@@ -51,15 +47,11 @@ export class AjaxModal {
                     method: "get",
                 });
 
-                if (!serverResponse.ok) {
-                    requestResult = {
+                if (!serverResponse.ok)
+                    requestResult = { } as Request
 
-                    } as Request
-                }
-
-                else {
+                else
                     requestResult = await serverResponse.json();
-                }
                 
                 this.PopulateRequest(requestResult);
             }
@@ -103,17 +95,14 @@ export class AjaxModal {
                 method: "get",
             });
 
-            if (!serverResponse.ok) {
-                offerResult = {
+            if (!serverResponse.ok)
+                offerResult = { } as Offer;
 
-                } as Offer;
-            }
-
-            else {
+            else
                 offerResult = await serverResponse.json();
-            }
 
-            this.PopulateReservation(offerResult, reservation);
+            this.PopulateAnnouncement(offerResult);
+            this.PopulateReservation(reservation);
 
             this.buttons.forEach(x => {
                 let method = x.dataset.method;
@@ -134,7 +123,7 @@ export class AjaxModal {
                 if((x as HTMLElement).dataset.method == columnSetting.Method) 
                     x.classList.remove("d-none");
                 else
-                    x.classList.add("d-none")
+                    x.classList.add("d-none");
             });
 
             this.buttons.forEach(x => {
@@ -148,11 +137,18 @@ export class AjaxModal {
     }
 
     PopulateAnnouncement(announcement: Announcement) {
-        var interactions = this.body.querySelector("[data-property='Interactions'");
-        if (interactions) {
-            let currentDiv = interactions.parentElement;
+        var reservationsField = this.body.querySelector("[data-property='Reservations'");
+        if (reservationsField) {
+            let currentDiv = reservationsField.parentElement;
             currentDiv?.classList.add("d-none");
-            interactions.innerHTML = "";
+            reservationsField.innerHTML = "";
+        }
+
+        var responsesField = this.body.querySelector("[data-property='Responses'");
+        if (responsesField) {
+            let currentDiv = responsesField.parentElement;
+            currentDiv?.classList.add("d-none");
+            responsesField.innerHTML = "";
         }
 
         var categoryField = this.body.querySelector("[data-property='Category']");
@@ -163,24 +159,6 @@ export class AjaxModal {
         if (typologyField)
             typologyField.textContent = announcement.Typology;
 
-        var publishDateField = this.body.querySelector("[data-property='PublishDate']");
-        if (publishDateField)
-            publishDateField.textContent = announcement.PublishDate ? announcement.PublishDate : "-";
-        
-        var beginDateField = this.body.querySelector("[data-property='BeginDate']");
-        if (beginDateField)
-            beginDateField.textContent = announcement.BeginDate;
-
-        var endDateField = this.body.querySelector("[data-property='EndDate']");
-        if (endDateField)
-            endDateField.textContent = announcement.EndDate;
-
-        var publisherField = this.body.querySelector("[data-property='Announcer']");
-        if (publisherField) {
-            let announcerDetails = `${announcement.Announcer.FirstName} ${announcement.Announcer.LastName} - ${announcement.Announcer.Email} - ${announcement.Announcer.PhoneNumber}`
-            publisherField.textContent = announcerDetails;
-        }
-
         var titleField = this.body.querySelector("[data-property='Title']");
         if (titleField)
             titleField.textContent = announcement.Title;
@@ -189,6 +167,24 @@ export class AjaxModal {
         if (descriptionField)
             descriptionField.textContent = announcement.Description;
 
+        var beginDateField = this.body.querySelector("[data-property='BeginDate']");
+        if (beginDateField)
+            beginDateField.textContent = announcement.BeginDate;
+
+        var endDateField = this.body.querySelector("[data-property='EndDate']");
+        if (endDateField)
+            endDateField.textContent = announcement.EndDate;
+
+        var publishDateField = this.body.querySelector("[data-property='PublishDate']");
+        if (publishDateField)
+            publishDateField.textContent = announcement.PublishDate ? announcement.PublishDate : "-";
+
+        var publisherField = this.body.querySelector("[data-property='Announcer']");
+        if (publisherField) {
+            let announcerDetails = `${announcement.Announcer.FirstName} ${announcement.Announcer.LastName} - ${announcement.Announcer.Email} - ${announcement.Announcer.PhoneNumber}`
+            publisherField.textContent = announcerDetails;
+        }
+        
         var locationField = this.body.querySelector("[data-property='Location']");
         if (locationField) {
             let locationDetails = `${announcement.Location.Address}, ${announcement.Location.CivicNumber}, ${announcement.Location.Cap} - ${announcement.Location.Municipality} (${announcement.Location.Province})`;
@@ -196,91 +192,49 @@ export class AjaxModal {
         }
     }
 
-    PopulateReservation(offer: Offer, reservation: Slot) {
-        var typologyField = this.body.querySelector("[data-property='Typology']");
-        if (typologyField)
-            typologyField.textContent = reservation.Typology;
+    PopulateReservation(reservation: Slot) {
+        var reservedField = this.body.querySelector("[data-property='ReservedBy']");
+        if (reservedField) {
+            let reservedDetails = `${reservation.Reservation?.ReservedBy.FirstName} ${reservation.Reservation?.ReservedBy.LastName} - ${reservation.Reservation?.ReservedBy.Email} - ${reservation.Reservation?.ReservedBy.PhoneNumber}`;
+            reservedField.textContent = reservedDetails;
+        }
 
-            var categoryField = this.body.querySelector("[data-property='Category']");
-            if (categoryField)
-                categoryField.textContent = offer.Category;
-    
-            var typologyField = this.body.querySelector("[data-property='Typology']");
-            if (typologyField)
-                typologyField.textContent = offer.Typology;
-    
-            var publishDateField = this.body.querySelector("[data-property='PublishDate']");
-            if (publishDateField)
-                publishDateField.textContent = offer.PublishDate ? offer.PublishDate : "-";
-            
-            var beginDateField = this.body.querySelector("[data-property='BeginDate']");
-            if (beginDateField)
-                beginDateField.textContent = offer.BeginDate;
-    
-            var endDateField = this.body.querySelector("[data-property='EndDate']");
-            if (endDateField)
-                endDateField.textContent = offer.EndDate;
-    
-            var publisherField = this.body.querySelector("[data-property='Announcer']");
-            if (publisherField) {
-                let announcerDetails = `${offer.Announcer.FirstName} ${offer.Announcer.LastName} - ${offer.Announcer.Email} - ${offer.Announcer.PhoneNumber}`
-                publisherField.textContent = announcerDetails;
-            }
-    
-            var titleField = this.body.querySelector("[data-property='Title']");
-            if (titleField)
-                titleField.textContent = offer.Title;
-    
-            var descriptionField = this.body.querySelector("[data-property='Description'");
-            if (descriptionField)
-                descriptionField.textContent = offer.Description;
-    
-            var locationField = this.body.querySelector("[data-property='Location']");
-            if (locationField) {
-                let locationDetails = `${offer.Location.Address}, ${offer.Location.CivicNumber}, ${offer.Location.Cap} - ${offer.Location.Municipality} (${offer.Location.Province})`;
-                locationField.textContent = locationDetails;
-            }
-
-        var publisherField = this.body.querySelector("[data-property='ReservedBy']");
-        if (publisherField) {
-            let announcerDetails = `${reservation.Reservation?.ReservedBy.FirstName} ${reservation.Reservation?.ReservedBy.LastName} - ${reservation.Reservation?.ReservedBy.Email} - ${reservation.Reservation?.ReservedBy.PhoneNumber}`
-            publisherField.textContent = announcerDetails;
+        var hourField = this.body.querySelector("[data-property='Start']");
+        if (hourField) {
+            let hourDetails = `${reservation.Start}`;
+            hourField.textContent = hourDetails;
         }
     }
 
     PopulateOffer(offer: Offer) {
-        let interactionsField = this.body.querySelector("[data-property='Interactions']");
+        let reservationsField = this.body.querySelector("[data-property='Reservations']");
 
         let reversations = offer.Slots.filter(x => x.Reservation != null);
         if (reversations.length) {
             reversations.forEach(x => {
                 let listItem = document.createElement("li");
                 listItem.textContent = `${x.Date} - ${x.Start}: ${x.Reservation?.ReservedBy.FirstName} ${x.Reservation?.ReservedBy.LastName} - ${x.Reservation?.ReservedBy.Email} - ${x.Reservation?.ReservedBy.PhoneNumber}`;
-                interactionsField?.appendChild(listItem);
+                reservationsField?.appendChild(listItem);
             })
 
-            let currentDiv = interactionsField?.parentElement;
+            let currentDiv = reservationsField?.parentElement;
             currentDiv?.classList.remove("d-none");
-
-            (<HTMLElement>currentDiv?.firstElementChild).textContent = "Slot";
         }
     }
 
     PopulateRequest(request: Request) {
-        let interactionsField = this.body.querySelector("[data-property='Interactions']");
+        let responsesField = this.body.querySelector("[data-property='Responses']");
 
         let responses = request.Responses;
         if (responses.length) {
             responses.forEach(x => {
                 let listItem = document.createElement("li");
                 listItem.textContent = `${x.RespondedAt}: ${x.RespondedBy.FirstName} ${x.RespondedBy.LastName}`;
-                interactionsField?.appendChild(listItem);
+                responsesField?.appendChild(listItem);
             })
             
-            let currentDiv = interactionsField?.parentElement;
+            let currentDiv = responsesField?.parentElement;
             currentDiv?.classList.remove("d-none");
-
-            (<HTMLElement>currentDiv?.firstElementChild).textContent = "Responses";
         }
     }
 }
