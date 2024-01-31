@@ -26,7 +26,7 @@ export class AjaxModal {
 
             this.PopulateAnnouncement(announcement);
             
-            if ((announcement as Offer).Slots !== undefined) {
+            if ((announcement as Offer).Start !== undefined) {
                 let offerResult: Offer;
                 let serverResponse = await fetch("/api/cerco-offro/offer/get/" + announcement.Id, {
                     method: "get",
